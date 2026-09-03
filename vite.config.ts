@@ -4,6 +4,8 @@ import { resolve } from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // GitHub Pages 部署在 /easyEat/ 子路径下
+  base: '/easyEat/',
   plugins: [react()],
   resolve: {
     alias: {
