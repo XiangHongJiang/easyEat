@@ -1,0 +1,114 @@
+import { createContext, useContext, useEffect, useReducer, type ReactNode } from 'react';
+import type { Dish, HistoryEntry, Settings } from '@/types';
+import { BUILT_IN_DISHES } from '@/data/dishes';
+import { loadJSON, saveJSON, STORAGE_KEYS } from '@/utils/storage';
+import { genId } from '@/utils/randomPick';
+
+// ========== State ==========
+interface AppState {
+  customDishes: Dish[];
+  history: HistoryEntry[];
+  settings: Settings;
+}
+
+const DEFAULT_SETTINGS: Settings = {
+  animationMode: 'slot',
+  noRepeat: true,
+  noRepeatCount: 3,
+  selectedMealType: '午餐',
+  selectedCuisine: '中餐',
+};
+
+const initialState: AppState = {
+  customDishes: loadJSON(STORAGE_KEYS.customDishes, [] as Dish[]),
+  history: loadJSON(STORAGE_KEYS.history, [] as HistoryEntry[]),
+  settings: loadJSON(STORAGE_KEYS.settings, DEFAULT_SETTINGS),
+};
+
+// ========== Actions ==========
+type Action =
+  | { type: 'ADD_DISH'; dish: Dish }
+  | { type: 'REMOVE_DISH'; id: string }
+  | { type: 'ADD_HISTORY'; dish: Dish }
+  | { type: 'CLEAR_HISTORY' }
+  | { type: 'UPDATE_SETTINGS'; patch: Partial<Settings> }
+  | { type: 'CLEAR_CUSTOM_DISHES' }
+  | { type: 'RESET_ALL' };
+
+function reducer(state: AppState, action: Action): AppState {
+  switch (action.type) {
+    case 'ADD_DISH':
+      return { ...state, customDishes: [...state.customDishes, action.dish] };
+
+    case 'REMOVE_DISH':
+      return { ...state, customDishes: state.customDishes.filter((d) => d.id !== action.id) };
+
+    case 'ADD_HISTORY': {
+      const entry: HistoryEntry = {
+        id: genId(),
+        dish: action.dish,
+        timestamp: Date.now(),
+      };
+      return { ...state, history: [entry, ...state.history] };
+    }
+
+    case 'CLEAR_HISTORY':
+      return { ...state, history: [] };
+
+    case 'UPDATE_SETTINGS':
+      return { ...state, settings: { ...state.settings, ...action.patch } };
+
+    case 'CLEAR_CUSTOM_DISHES':
+      return { ...state, customDishes: [] };
+
+    case 'RESET_ALL':
+      return {
+        customDishes: [],
+        history: [],
+        settings: DEFAULT_SETTINGS,
+      };
+
+    default:
+      return state;
+  }
+}
+
+// ========== Context ==========
+interface AppContextValue extends AppState {
+  allDishes: Dish[];
+  dispatch: React.Dispatch<Action>;
+}
+
+const AppContext = createContext<AppContextValue | null>(null);
+
+export function AppProvider({ children }: { children: ReactNode }) {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  // 持久化
+  useEffect(() => {
+    saveJSON(STORAGE_KEYS.customDishes, state.customDishes);
+  }, [state.customDishes]);
+
+  useEffect(() => {
+    saveJSON(STORAGE_KEYS.history, state.history);
+  }, [state.history]);
+
+  useEffect(() => {
+    saveJSON(STORAGE_KEYS.settings, state.settings);
+  }, [state.settings]);
+
+  // 合并内置 + 自定义菜品
+  const allDishes = [...BUILT_IN_DISHES, ...state.customDishes];
+
+  return (
+    <AppContext.Provider value={{ ...state, allDishes, dispatch }}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+
+export function useAppStore(): AppContextValue {
+  const ctx = useContext(AppContext);
+  if (!ctx) throw new Error('useAppStore must be used within AppProvider');
+  return ctx;
+}
