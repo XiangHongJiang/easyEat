@@ -33,7 +33,7 @@ export function SlotMachine({ dishes, spinning, result }: SlotMachineProps) {
   useEffect(() => {
     if (!spinning || displayItems.length === 0) return;
 
-    const ITEM_HEIGHT = 80;
+    const ITEM_HEIGHT = 72;
     const totalHeight = displayItems.length * ITEM_HEIGHT;
     speedRef.current = 35; // 初始速度 px/frame
     offsetRef.current = 0;
@@ -61,12 +61,14 @@ export function SlotMachine({ dishes, spinning, result }: SlotMachineProps) {
 
         rafRef.current = requestAnimationFrame(animate);
       } else {
-        // 停止 — 定格到结果
+        // 停止 — 定格到结果（偏移到第二段，让结果出现在中间区域）
         if (result && listRef.current) {
-          const resultIndex = displayItems.findIndex((d) => d.id === result.id);
-          if (resultIndex !== -1) {
-            // 定格到中间位置
-            const targetOffset = resultIndex * ITEM_HEIGHT;
+          const baseLen = dishes.length;
+          const firstIndex = displayItems.findIndex((d) => d.id === result.id);
+          if (firstIndex !== -1) {
+            // 偏移到第二段对应位置，视觉上更居中
+            const targetIndex = firstIndex + baseLen;
+            const targetOffset = targetIndex * ITEM_HEIGHT;
             listRef.current.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
             listRef.current.style.transform = `translateY(-${targetOffset}px)`;
           }
@@ -83,16 +85,18 @@ export function SlotMachine({ dishes, spinning, result }: SlotMachineProps) {
     };
   }, [spinning, displayItems, result]);
 
-  // 静态展示结果
+  // 静态展示结果（定格在第二段对应位置）
   useEffect(() => {
     if (!spinning && result && listRef.current) {
-      const resultIndex = displayItems.findIndex((d) => d.id === result.id);
-      if (resultIndex !== -1) {
+      const baseLen = dishes.length;
+      const firstIndex = displayItems.findIndex((d) => d.id === result.id);
+      if (firstIndex !== -1) {
+        const targetIndex = firstIndex + baseLen;
         listRef.current.style.transition = '';
-        listRef.current.style.transform = `translateY(-${resultIndex * 80}px)`;
+        listRef.current.style.transform = `translateY(-${targetIndex * 72}px)`;
       }
     }
-  }, [spinning, result, displayItems]);
+  }, [spinning, result, displayItems, dishes.length]);
 
   if (displayItems.length === 0) {
     return (
@@ -111,7 +115,6 @@ export function SlotMachine({ dishes, spinning, result }: SlotMachineProps) {
 
   return (
     <div className="slot-machine">
-      <div className="slot-indicator" />
       <div className="slot-viewport">
         <div className="slot-list" ref={listRef}>
           {displayItems.map((dish, i) => (

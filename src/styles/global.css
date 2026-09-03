@@ -161,30 +161,34 @@ input {
   padding: 8px 20px;
   gap: 16px;
 }
+.slot-machine-wrapper {
+  position: relative;
+  width: 290px;
+  height: 190px;
+}
 .slot-machine {
-  width: 260px;
-  height: 200px;
-  background: linear-gradient(180deg, #FFF5EB 0%, #FFE8D6 100%);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft), inset 0 2px 0 rgba(255,255,255,0.8);
+  width: 290px;
+  height: 190px;
+  background: linear-gradient(180deg, #FFFBF5 0%, #FFF3E8 100%);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft), inset 0 0 0 2px rgba(255,107,53,0.2);
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid var(--color-main);
 }
 .slot-machine::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; height: 50%;
-  background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
   pointer-events: none;
   z-index: 2;
 }
 .slot-viewport {
   width: 100%;
-  height: 80px;
+  height: 108px;
   overflow: hidden;
   position: relative;
   z-index: 1;
@@ -193,17 +197,17 @@ input {
   content: '';
   position: absolute;
   left: 0; right: 0;
-  height: 30px;
+  height: 36px;
   z-index: 3;
   pointer-events: none;
 }
 .slot-viewport::before {
   top: 0;
-  background: linear-gradient(180deg, rgba(255,245,235,1) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(255,251,245,1) 0%, transparent 100%);
 }
 .slot-viewport::after {
   bottom: 0;
-  background: linear-gradient(0deg, rgba(255,232,214,1) 0%, transparent 100%);
+  background: linear-gradient(0deg, rgba(255,243,232,1) 0%, transparent 100%);
 }
 .slot-list {
   display: flex;
@@ -212,44 +216,15 @@ input {
   will-change: transform;
 }
 .slot-item {
-  height: 80px;
+  height: 72px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
 }
-.slot-item .emoji { font-size: 36px; }
+.slot-item .emoji { font-size: 32px; }
 .slot-item .name { font-size: 14px; font-weight: 700; color: var(--color-text); }
-
-.slot-indicator {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 280px;
-  height: 3px;
-  background: var(--color-main);
-  z-index: 4;
-  box-shadow: 0 0 8px var(--color-main);
-  border-radius: 2px;
-}
-.slot-indicator::before, .slot-indicator::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0; height: 0;
-}
-.slot-indicator::before {
-  left: -10px;
-  border: 6px solid transparent;
-  border-right-color: var(--color-main);
-}
-.slot-indicator::after {
-  right: -10px;
-  border: 6px solid transparent;
-  border-left-color: var(--color-main);
-}
 
 /* 转盘区域 */
 .wheel-area {
@@ -262,54 +237,88 @@ input {
   gap: 16px;
 }
 .wheel-container {
-  width: 240px;
-  height: 240px;
+  width: 270px;
+  height: 270px;
   position: relative;
 }
 .wheel-pointer {
   position: absolute;
-  top: -8px;
+  top: -6px;
   left: 50%;
   transform: translateX(-50%);
   width: 0; height: 0;
-  border: 12px solid transparent;
+  border: 10px solid transparent;
   border-top-color: var(--color-main);
   z-index: 10;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12));
 }
 .wheel-svg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 4px 12px rgba(93,64,55,0.12));
+  border: 3px solid #fff;
+  border-radius: 50%;
+  filter: drop-shadow(0 3px 10px rgba(93,64,55,0.1));
   transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
 }
 .wheel-center {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 50px; height: 50px;
+  width: 42px; height: 42px;
   background: #fff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-size: 22px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   z-index: 5;
 }
 
 /* 结果卡片 */
 .result-card {
   background: var(--bg-card);
-  border-radius: var(--radius-md);
-  padding: 16px 24px;
-  box-shadow: var(--shadow-card);
+  border-radius: 20px;
+  padding: 20px 28px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--color-border);
   text-align: center;
   animation: bounceIn .5s ease;
 }
-.result-card .result-emoji { font-size: 48px; }
+.slot-machine-wrapper .result-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 20px;
+}
+.wheel-machine-wrapper {
+  position: relative;
+  width: 270px;
+  height: 270px;
+}
+.wheel-machine-wrapper .result-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 20px;
+}
+.result-card .result-emoji { font-size: 44px; }
 .result-card .result-name {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
   color: var(--color-text);
   margin: 4px 0;
@@ -343,12 +352,13 @@ input {
 
 /* 帮我选按钮 */
 .pick-btn {
-  width: 100%;
-  padding: 16px;
-  border-radius: var(--radius-md);
+  width: auto;
+  max-width: 260px;
+  padding: 12px 32px;
+  border-radius: var(--radius-sm);
   background: linear-gradient(135deg, var(--color-main) 0%, var(--color-main-light) 100%);
   color: #fff;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   box-shadow: var(--shadow-btn);
   transition: all .2s;
@@ -719,7 +729,7 @@ input {
 
 /* 危险区 */
 .danger-btn {
-  width: 100%;
+  width: 50%;
   padding: 12px;
   border: 1.5px solid #FFAB91;
   background: #FFF3F0;
@@ -727,7 +737,8 @@ input {
   color: #E64A19;
   font-size: 14px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin: 0 auto 8px;
+  display: block;
 }
 
 /* ========== 添加菜品弹窗 ========== */

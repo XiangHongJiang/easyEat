@@ -8,7 +8,7 @@ interface WheelProps {
   onSpinEnd?: () => void;
 }
 
-const COLORS = ['#FF6B35', '#FFD700', '#7CB342', '#FF8C5A'];
+const COLORS = ['#FFB088', '#FFE082', '#AED581', '#FFCCBC'];
 
 /**
  * 转盘组件
@@ -99,13 +99,13 @@ export function Wheel({ dishes, spinning, result, onSpinEnd }: WheelProps) {
       >
         {slices.map((slice, i) => (
           <g key={i}>
-            <path d={slice.path} fill={slice.fill} />
+            <path d={slice.path} fill={slice.fill} stroke="#fff" strokeWidth="1" />
             <text
               x={slice.tx}
               y={slice.ty}
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize="14"
+              fontSize="16"
             >
               {slice.emoji}
             </text>

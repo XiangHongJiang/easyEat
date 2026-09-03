@@ -16,6 +16,22 @@ const CUISINES: { value: Cuisine; icon: string }[] = [
   { value: '西餐', icon: '🍴' },
 ];
 
+function ResultCard({ result, onReroll }: {
+  result: Dish;
+  onReroll: () => void;
+}) {
+  return (
+    <div className="result-card show">
+      <div className="result-emoji">{result.emoji}</div>
+      <div className="result-name">{result.name}</div>
+      <div className="result-desc">{result.description}</div>
+      <div className="result-actions">
+        <button className="btn-sm secondary" onClick={onReroll}>不喜欢，换一个</button>
+      </div>
+    </div>
+  );
+}
+
 export function Home() {
   const { allDishes, history, settings, dispatch } = useAppStore();
   const [spinning, setSpinning] = useState(false);
@@ -30,7 +46,9 @@ export function Home() {
 
   const handlePick = useCallback(() => {
     if (spinning) return;
-    const picked = pickRandomDish(pool, history, settings.noRepeat, settings.noRepeatCount);
+    // 转盘模式只从前8个菜品中选（转盘最多显示8个扇形）
+    const pickPool = settings.animationMode === 'wheel' ? pool.slice(0, 8) : pool;
+    const picked = pickRandomDish(pickPool, history, settings.noRepeat, settings.noRepeatCount);
     if (!picked) return;
 
     setResult(picked);
@@ -47,7 +65,7 @@ export function Home() {
       }, 2900);
     }
     // 转盘模式由 Wheel 组件的 onSpinEnd 回调处理
-  }, [spinning, pool, history, settings.noRepeat, settings.noRepeatCount, settings.animationMode, dispatch]);
+  }, [spinning, pool, history, settings.noRepeat, settings.noRepeatCount, settings.animationMode, dispatch, pickRandomDish]);
 
   // 转盘结束回调
   const handleWheelEnd = useCallback(() => {
@@ -72,11 +90,6 @@ export function Home() {
     setTimeout(() => handlePick(), 100);
   };
 
-  const handleConfirm = () => {
-    setShowResult(false);
-    setResult(null);
-  };
-
   return (
     <div className="page active">
       {/* Header */}
@@ -87,12 +100,14 @@ export function Home() {
         </div>
         <div className="mode-toggle">
           <button
+            aria-label="老虎机模式"
             className={settings.animationMode === 'slot' ? 'active' : ''}
             onClick={() => dispatch({ type: 'UPDATE_SETTINGS', patch: { animationMode: 'slot' as AnimationMode } })}
           >
             🎰
           </button>
           <button
+            aria-label="转盘模式"
             className={settings.animationMode === 'wheel' ? 'active' : ''}
             onClick={() => dispatch({ type: 'UPDATE_SETTINGS', patch: { animationMode: 'wheel' as AnimationMode } })}
           >
@@ -131,42 +146,52 @@ export function Home() {
 
       {/* 动画区 */}
       <div className="slot-area" style={{ display: settings.animationMode === 'slot' ? 'flex' : 'none' }}>
-        <SlotMachine dishes={pool} spinning={spinning} result={showResult ? result : null} />
-        {!showResult && (
-          <button className="pick-btn" onClick={handlePick} disabled={spinning || pool.length === 0}>
-            {spinning ? '🎲 选取中...' : pool.length === 0 ? '暂无菜品' : '🎲 帮我选！'}
-          </button>
-        )}
-        {showResult && result && (
-          <div className="result-card show">
-            <div className="result-emoji">{result.emoji}</div>
-            <div className="result-name">{result.name}</div>
-            <div className="result-desc">{result.description}</div>
-            <div className="result-actions">
-              <button className="btn-sm secondary" onClick={handleReroll}>🔄 换一个</button>
-              <button className="btn-sm primary" onClick={handleConfirm}>✅ 就吃这个</button>
-            </div>
+        {pool.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">🍽️</div>
+            <div className="empty-text">该筛选条件下暂无菜品<br />试试更换用餐类型或菜系</div>
           </div>
+        ) : (
+          <>
+            <div className="slot-machine-wrapper">
+              {!showResult && (
+                <SlotMachine dishes={pool} spinning={spinning} result={showResult ? result : null} />
+              )}
+              {showResult && result && (
+                <ResultCard result={result} onReroll={handleReroll} />
+              )}
+            </div>
+            {!showResult && (
+              <button className="pick-btn" onClick={handlePick} disabled={spinning}>
+                {spinning ? '🎲 选取中...' : '🎲 帮我选！'}
+              </button>
+            )}
+          </>
         )}
       </div>
 
       <div className="wheel-area" style={{ display: settings.animationMode === 'wheel' ? 'flex' : 'none' }}>
-        <Wheel dishes={pool} spinning={spinning} result={result} onSpinEnd={handleWheelEnd} />
-        {!showResult && (
-          <button className="pick-btn" onClick={handlePick} disabled={spinning || pool.length === 0}>
-            {spinning ? '🎲 选取中...' : pool.length === 0 ? '暂无菜品' : '🎲 帮我选！'}
-          </button>
-        )}
-        {showResult && result && (
-          <div className="result-card show">
-            <div className="result-emoji">{result.emoji}</div>
-            <div className="result-name">{result.name}</div>
-            <div className="result-desc">{result.description}</div>
-            <div className="result-actions">
-              <button className="btn-sm secondary" onClick={handleReroll}>🔄 换一个</button>
-              <button className="btn-sm primary" onClick={handleConfirm}>✅ 就吃这个</button>
-            </div>
+        {pool.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">🍽️</div>
+            <div className="empty-text">该筛选条件下暂无菜品<br />试试更换用餐类型或菜系</div>
           </div>
+        ) : (
+          <>
+            <div className="wheel-machine-wrapper">
+              {!showResult && (
+                <Wheel dishes={pool} spinning={spinning} result={result} onSpinEnd={handleWheelEnd} />
+              )}
+              {showResult && result && (
+                <ResultCard result={result} onReroll={handleReroll} />
+              )}
+            </div>
+            {!showResult && (
+              <button className="pick-btn" onClick={handlePick} disabled={spinning}>
+                {spinning ? '🎲 选取中...' : '🎲 帮我选！'}
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>

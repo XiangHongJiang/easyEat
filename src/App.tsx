@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AppProvider } from '@/store/AppStore';
 import { TabBar } from '@/components/TabBar';
 import { Home } from '@/pages/Home';
@@ -7,10 +7,23 @@ import { Settings } from '@/pages/Settings';
 import type { PageRoute } from '@/types';
 
 function StatusBar() {
+  const [time, setTime] = useState('');
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      setTime(`${h}:${m}`);
+    };
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="status-bar">
-      <span>9:41</span>
-      <span className="icons">📶 🔋</span>
+      <span>{time}</span>
     </div>
   );
 }
