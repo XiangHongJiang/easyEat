@@ -50,7 +50,7 @@ export interface Settings {
 export type AnimationMode = 'slot' | 'wheel';
 
 /** 历史筛选范围 */
-export type HistoryFilter = 'all' | 'week' | 'month';
+export type HistoryFilter = 'threeDays' | 'week' | 'month' | 'all';
 
 /** 页面路由 */
 export type PageRoute = 'home' | 'history' | 'settings';

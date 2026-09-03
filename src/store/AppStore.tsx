@@ -49,7 +49,14 @@ function reducer(state: AppState, action: Action): AppState {
         dish: action.dish,
         timestamp: Date.now(),
       };
-      return { ...state, history: [entry, ...state.history] };
+      // 每个时段每天只保留1条：移除今天同一时段的旧记录
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const todayMs = todayStart.getTime();
+      const filtered = state.history.filter(
+        (e) => !(e.timestamp >= todayMs && e.dish.mealType === action.dish.mealType),
+      );
+      return { ...state, history: [entry, ...filtered] };
     }
 
     case 'CLEAR_HISTORY':

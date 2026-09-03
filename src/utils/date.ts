@@ -34,11 +34,14 @@ export function formatDateLabelFull(ts: number): string {
   return `${date.getMonth() + 1}月${date.getDate()}日`;
 }
 
-/** 按日期分组历史记录 */
-export function groupByDate(entries: HistoryEntry[]): { date: string; items: HistoryEntry[] }[] {
+/** 按日期分组历史记录（可自定义日期标签格式化函数） */
+export function groupByDate(
+  entries: HistoryEntry[],
+  labelFn: (ts: number) => string = formatDateLabel,
+): { date: string; items: HistoryEntry[] }[] {
   const groups: Record<string, HistoryEntry[]> = {};
   for (const entry of entries) {
-    const label = formatDateLabel(entry.timestamp);
+    const label = labelFn(entry.timestamp);
     if (!groups[label]) groups[label] = [];
     groups[label].push(entry);
   }
@@ -53,6 +56,9 @@ export function filterHistory(entries: HistoryEntry[], filter: HistoryFilter): H
   const weekMs = 7 * 86400000;
   const monthMs = 30 * 86400000;
 
+  if (filter === 'threeDays') {
+    return entries.filter((e) => now - e.timestamp <= 3 * 86400000);
+  }
   if (filter === 'week') {
     return entries.filter((e) => now - e.timestamp <= weekMs);
   }

@@ -395,14 +395,21 @@ input {
   color: var(--color-text-light);
   font-size: 13px;
   font-weight: 600;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.clear-btn:active {
+  transform: scale(0.97);
 }
 
 .history-tabs {
   display: flex;
   padding: 0 20px;
   gap: 0;
-  border-bottom: 1px solid var(--color-border);
   flex-shrink: 0;
+  background: rgba(255, 248, 240, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(240, 224, 208, 0.5);
 }
 .history-tab {
   flex: 1;
@@ -412,7 +419,10 @@ input {
   font-weight: 600;
   color: var(--color-text-muted);
   border-bottom: 2.5px solid transparent;
-  transition: all .2s;
+  transition: color 200ms cubic-bezier(0.23, 1, 0.32, 1), border-bottom-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.history-tab:active {
+  transform: scale(0.97);
 }
 .history-tab.active {
   color: var(--color-main);
@@ -420,14 +430,61 @@ input {
   font-weight: 800;
 }
 
-.history-last-card {
+.history-today-section {
   margin: 12px 20px;
+  flex-shrink: 0;
+}
+
+.history-date-picker {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 20px 4px;
+  flex-shrink: 0;
+}
+.date-picker-trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255, 107, 53, 0.08);
+  transition: background 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.date-picker-trigger:active {
+  background: rgba(255, 107, 53, 0.15);
+}
+.date-picker-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-main);
+}
+.date-picker-input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  border: none;
+  padding: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.history-today-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+.history-last-card {
   background: linear-gradient(135deg, #FFF5EB 0%, #FFE8D6 100%);
   border-radius: var(--radius-md);
   padding: 16px;
-  box-shadow: var(--shadow-card);
-  border: 1.5px solid #FFE0C0;
-  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(93, 64, 55, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.history-today-section .history-last-card {
+  margin: 0 0 8px 0;
+}
+.history-today-section .history-last-card:last-child {
+  margin-bottom: 0;
 }
 .history-last-card .last-label {
   font-size: 12px;
@@ -461,10 +518,10 @@ input {
   margin-top: 2px;
 }
 .history-last-card .last-time {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--color-text-muted);
   text-align: right;
-  white-space: pre-line;
 }
 
 .history-expand-hint {
@@ -478,10 +535,14 @@ input {
   justify-content: center;
   gap: 6px;
   flex-shrink: 0;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.history-expand-hint:active {
+  transform: scale(0.97);
 }
 .history-expand-hint .arrow {
   display: inline-block;
-  transition: transform .2s;
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .history-expand-hint.expanded .arrow {
   transform: rotate(180deg);
@@ -491,9 +552,20 @@ input {
   padding: 0 20px 12px;
   overflow-y: auto;
   flex: 1;
+  animation: expandIn 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .history-list-collapsible.hidden {
   display: none;
+}
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .history-group {
@@ -512,7 +584,7 @@ input {
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--color-border);
+  background: linear-gradient(90deg, var(--color-border) 0%, transparent 100%);
 }
 .history-item {
   display: flex;
@@ -523,6 +595,10 @@ input {
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-card);
   margin-bottom: 8px;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.history-item:active {
+  transform: scale(0.97);
 }
 .history-item .h-emoji {
   font-size: 28px;
@@ -531,6 +607,7 @@ input {
   background: var(--bg-secondary);
   border-radius: 12px;
   flex-shrink: 0;
+  box-shadow: inset 0 1px 2px rgba(93, 64, 55, 0.06);
 }
 .history-item .h-info { flex: 1; }
 .history-item .h-name {
@@ -558,9 +635,10 @@ input {
   gap: 12px;
   padding: 40px;
 }
-.empty-state .empty-icon { font-size: 64px; opacity: 0.6; }
+.empty-state .empty-icon { font-size: 48px; opacity: 0.5; }
 .empty-state .empty-text {
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--color-text-muted);
   text-align: center;
   line-height: 1.6;
