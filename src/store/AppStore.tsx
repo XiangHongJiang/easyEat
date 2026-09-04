@@ -1,8 +1,20 @@
 import { createContext, useContext, useEffect, useReducer, type ReactNode } from 'react';
 import type { Dish, HistoryEntry, MealType, Settings } from '@/types';
 import { BUILT_IN_DISHES } from '@/data/dishes';
+import { DEMO_HISTORY_CONFIG } from '@/data/demoHistory';
 import { loadJSON, saveJSON, STORAGE_KEYS } from '@/utils/storage';
 import { genId } from '@/utils/randomPick';
+
+// ========== 开发模式示例数据 ==========
+function buildDemoHistory(): HistoryEntry[] {
+  const dishes = BUILT_IN_DISHES;
+  const pick = (mealType: MealType, cuisine: '中餐' | '西餐') =>
+    dishes.find((d) => d.mealType === mealType && d.cuisine === cuisine)!;
+  return DEMO_HISTORY_CONFIG.map((item) => {
+    const d = new Date(item.date.year, item.date.month - 1, item.date.day, item.hour, Math.floor(Math.random() * 60));
+    return { id: genId(), dish: pick(item.mealType, item.cuisine), timestamp: d.getTime() };
+  });
+}
 
 /** 根据当前时间返回默认用餐类型：09:59前早餐，10:00-13:59午餐，14:00后晚餐 */
 function getDefaultMealType(): MealType {
@@ -41,7 +53,8 @@ type Action =
   | { type: 'CLEAR_HISTORY' }
   | { type: 'UPDATE_SETTINGS'; patch: Partial<Settings> }
   | { type: 'CLEAR_CUSTOM_DISHES' }
-  | { type: 'RESET_ALL' };
+  | { type: 'RESET_ALL' }
+  | { type: 'LOAD_DEMO_HISTORY' };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -82,6 +95,9 @@ function reducer(state: AppState, action: Action): AppState {
         history: [],
         settings: DEFAULT_SETTINGS,
       };
+
+    case 'LOAD_DEMO_HISTORY':
+      return { ...state, history: buildDemoHistory() };
 
     default:
       return state;

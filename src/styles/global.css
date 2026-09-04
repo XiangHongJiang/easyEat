@@ -418,6 +418,24 @@ input {
   flex: 1;
   overflow-y: auto;
 }
+.history-date-group {
+  margin-bottom: 20px;
+}
+.history-date-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.history-date-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
 .history-last-card {
   background: linear-gradient(135deg, #FFF5EB 0%, #FFE8D6 100%);
   border-radius: var(--radius-md);

@@ -8,15 +8,16 @@ export function formatTime(ts: number): string {
   return `${h}:${m}`;
 }
 
-/** 获取日期标签：今天/昨天/M月D日 */
+/** 获取日期标签：今天/昨天/前天/M月D日 */
 export function formatDateLabel(ts: number): string {
   const now = new Date();
   const date = new Date(ts);
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const yesterdayStart = todayStart - 86400000;
+  const dayMs = 86400000;
 
   if (ts >= todayStart) return '今天';
-  if (ts >= yesterdayStart) return '昨天';
+  if (ts >= todayStart - dayMs) return '昨天';
+  if (ts >= todayStart - dayMs * 2) return '前天';
 
   return `${date.getMonth() + 1}月${date.getDate()}日`;
 }
