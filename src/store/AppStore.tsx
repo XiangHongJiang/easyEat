@@ -27,6 +27,7 @@ function getDefaultMealType(): MealType {
 // ========== State ==========
 interface AppState {
   customDishes: Dish[];
+  removedDishIds: string[];
   history: HistoryEntry[];
   settings: Settings;
 }
@@ -41,6 +42,7 @@ const DEFAULT_SETTINGS: Settings = {
 
 const initialState: AppState = {
   customDishes: loadJSON(STORAGE_KEYS.customDishes, [] as Dish[]),
+  removedDishIds: loadJSON(STORAGE_KEYS.removedDishIds, [] as string[]),
   history: loadJSON(STORAGE_KEYS.history, [] as HistoryEntry[]),
   settings: loadJSON(STORAGE_KEYS.settings, DEFAULT_SETTINGS),
 };
@@ -49,6 +51,7 @@ const initialState: AppState = {
 type Action =
   | { type: 'ADD_DISH'; dish: Dish }
   | { type: 'REMOVE_DISH'; id: string }
+  | { type: 'RESTORE_DISHES' }
   | { type: 'ADD_HISTORY'; dish: Dish }
   | { type: 'CLEAR_HISTORY' }
   | { type: 'UPDATE_SETTINGS'; patch: Partial<Settings> }
@@ -62,7 +65,15 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, customDishes: [...state.customDishes, action.dish] };
 
     case 'REMOVE_DISH':
-      return { ...state, customDishes: state.customDishes.filter((d) => d.id !== action.id) };
+      // 自定义菜品直接从列表移除；内置菜品加入 removedDishIds
+      return {
+        ...state,
+        customDishes: state.customDishes.filter((d) => d.id !== action.id),
+        removedDishIds: [...new Set([...state.removedDishIds, action.id])],
+      };
+
+    case 'RESTORE_DISHES':
+      return { ...state, removedDishIds: [] };
 
     case 'ADD_HISTORY': {
       const entry: HistoryEntry = {
@@ -92,6 +103,7 @@ function reducer(state: AppState, action: Action): AppState {
     case 'RESET_ALL':
       return {
         customDishes: [],
+        removedDishIds: [],
         history: [],
         settings: DEFAULT_SETTINGS,
       };
@@ -121,6 +133,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [state.customDishes]);
 
   useEffect(() => {
+    saveJSON(STORAGE_KEYS.removedDishIds, state.removedDishIds);
+  }, [state.removedDishIds]);
+
+  useEffect(() => {
     saveJSON(STORAGE_KEYS.history, state.history);
   }, [state.history]);
 
@@ -128,8 +144,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     saveJSON(STORAGE_KEYS.settings, state.settings);
   }, [state.settings]);
 
-  // 合并内置 + 自定义菜品
-  const allDishes = [...BUILT_IN_DISHES, ...state.customDishes];
+  // 合并内置 + 自定义菜品，过滤掉被删除的
+  const allDishes = [...BUILT_IN_DISHES, ...state.customDishes].filter(
+    (d) => !state.removedDishIds.includes(d.id),
+  );
 
   return (
     <AppContext.Provider value={{ ...state, allDishes, dispatch }}>

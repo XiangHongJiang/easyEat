@@ -6,7 +6,7 @@ interface SettingsModalProps {
 }
 
 export function SettingsModal({ onClose }: SettingsModalProps) {
-  const { settings, dispatch } = useAppStore();
+  const { settings, removedDishIds, dispatch } = useAppStore();
 
   const adjustNoRepeat = (delta: number) => {
     const next = Math.max(1, Math.min(10, settings.noRepeatCount + delta));
@@ -16,6 +16,12 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
   const handleClearCustom = () => {
     if (confirm('确定清空所有自定义菜品吗？')) {
       dispatch({ type: 'CLEAR_CUSTOM_DISHES' });
+    }
+  };
+
+  const handleRestoreDishes = () => {
+    if (confirm('确定恢复所有已删除的内置菜品吗？')) {
+      dispatch({ type: 'RESTORE_DISHES' });
     }
   };
 
@@ -75,6 +81,9 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
         {/* 数据管理 */}
         <div className="form-group">
           <label className="form-label">数据管理</label>
+          {removedDishIds.length > 0 && (
+            <button className="danger-btn" onClick={handleRestoreDishes}>♻️ 恢复内置菜品（{removedDishIds.length}）</button>
+          )}
           <button className="danger-btn" onClick={handleClearCustom}>🗑️ 清空自定义菜品</button>
           <button className="danger-btn" onClick={handleResetAll}>↩️ 重置所有数据</button>
         </div>

@@ -26,7 +26,7 @@ export function Dishes() {
   };
 
   const renderDishCard = (dish: typeof allDishes[number]) => (
-    <div className={`dish-card ${dish.builtIn ? 'builtin' : 'custom'}`} key={dish.id}>
+    <div className="dish-card" key={dish.id}>
       <div className="d-emoji">{dish.emoji}</div>
       <div className="d-info">
         <div className="d-name">{dish.name}</div>

@@ -31,6 +31,7 @@ export function removeKey(key: string): void {
 /** localStorage key 常量 */
 export const STORAGE_KEYS = {
   customDishes: 'customDishes',
+  removedDishIds: 'removedDishIds',
   history: 'history',
   settings: 'settings',
 } as const;
