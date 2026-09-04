@@ -4,6 +4,7 @@ import { EMOJI_OPTIONS } from '@/data/dishes';
 import { genId } from '@/utils/randomPick';
 
 interface AddDishModalProps {
+  defaultMealType?: MealType;
   onClose: () => void;
   onConfirm: (dish: Dish) => void;
 }
@@ -11,10 +12,10 @@ interface AddDishModalProps {
 const MEAL_TYPES: MealType[] = ['早餐', '午餐', '晚餐'];
 const CUISINES: Cuisine[] = ['中餐', '西餐'];
 
-export function AddDishModal({ onClose, onConfirm }: AddDishModalProps) {
+export function AddDishModal({ defaultMealType, onClose, onConfirm }: AddDishModalProps) {
   const [name, setName] = useState('');
   const [emoji, setEmoji] = useState(EMOJI_OPTIONS[0]);
-  const [mealType, setMealType] = useState<MealType>('午餐');
+  const [mealType, setMealType] = useState<MealType>(defaultMealType ?? '午餐');
   const [cuisine, setCuisine] = useState<Cuisine>('中餐');
   const [description, setDescription] = useState('');
 

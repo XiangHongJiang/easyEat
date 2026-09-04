@@ -680,6 +680,144 @@ input {
   gap: 8px;
 }
 
+/* ========== 菜品页 ========== */
+.dishes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px 12px;
+}
+.dishes-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.dishes-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-btn {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--color-border);
+  background: var(--bg-card);
+  border-radius: 12px;
+  font-size: 18px;
+  color: var(--color-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+}
+.icon-btn.primary {
+  background: var(--color-main);
+  color: #fff;
+  border-color: var(--color-main);
+  box-shadow: var(--shadow-btn);
+}
+.meal-tabs {
+  display: flex;
+  padding: 0 20px;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.meal-tab {
+  flex: 1;
+  padding: 10px 0;
+  border: 1.5px solid var(--color-border);
+  background: var(--bg-card);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-light);
+  cursor: pointer;
+  text-align: center;
+  transition: all .2s;
+}
+.meal-tab.active {
+  border-color: var(--color-main);
+  background: #FFF5EB;
+  color: var(--color-main);
+  font-weight: 800;
+}
+.dishes-list {
+  flex: 1;
+  padding: 0 20px 20px;
+  overflow-y: auto;
+}
+.cuisine-group {
+  margin-bottom: 20px;
+}
+.cuisine-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+.dish-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 8px;
+}
+.dish-card .d-emoji {
+  font-size: 28px;
+  width: 44px; height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.dish-card .d-info {
+  flex: 1;
+  min-width: 0;
+}
+.dish-card .d-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+.dish-card .d-desc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dish-card .d-cat {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  background: var(--bg-secondary);
+  padding: 3px 8px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.dish-card .d-delete {
+  color: #E57373;
+  cursor: pointer;
+  font-size: 18px;
+  flex-shrink: 0;
+  padding: 4px;
+  background: none;
+  border: none;
+}
+.dish-card.builtin .d-delete {
+  display: none;
+}
+.dish-card.custom {
+  border: 1.5px solid #FFCC80;
+  background: #FFF8F0;
+}
+
 /* 开关 */
 .toggle {
   width: 44px; height: 26px;

@@ -8,7 +8,7 @@ interface TabBarProps {
 const TABS: { route: PageRoute; icon: string; label: string }[] = [
   { route: 'home', icon: '🏠', label: '首页' },
   { route: 'history', icon: '📋', label: '历史' },
-  { route: 'settings', icon: '⚙️', label: '设置' },
+  { route: 'dishes', icon: '🍽️', label: '菜品' },
 ];
 
 export function TabBar({ current, onChange }: TabBarProps) {

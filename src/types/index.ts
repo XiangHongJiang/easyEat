@@ -53,4 +53,4 @@ export type AnimationMode = 'slot' | 'wheel';
 export type HistoryFilter = 'threeDays' | 'week' | 'month' | 'all';
 
 /** 页面路由 */
-export type PageRoute = 'home' | 'history' | 'settings';
+export type PageRoute = 'home' | 'history' | 'dishes';

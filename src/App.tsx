@@ -3,7 +3,7 @@ import { AppProvider } from '@/store/AppStore';
 import { TabBar } from '@/components/TabBar';
 import { Home } from '@/pages/Home';
 import { History } from '@/pages/History';
-import { Settings } from '@/pages/Settings';
+import { Dishes } from '@/pages/Dishes';
 import type { PageRoute } from '@/types';
 
 function StatusBar() {
@@ -36,7 +36,7 @@ function AppContent() {
       <StatusBar />
       {page === 'home' && <Home />}
       {page === 'history' && <History />}
-      {page === 'settings' && <Settings />}
+      {page === 'dishes' && <Dishes />}
       <TabBar current={page} onChange={setPage} />
     </>
   );
