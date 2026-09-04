@@ -1,8 +1,16 @@
 import { createContext, useContext, useEffect, useReducer, type ReactNode } from 'react';
-import type { Dish, HistoryEntry, Settings } from '@/types';
+import type { Dish, HistoryEntry, MealType, Settings } from '@/types';
 import { BUILT_IN_DISHES } from '@/data/dishes';
 import { loadJSON, saveJSON, STORAGE_KEYS } from '@/utils/storage';
 import { genId } from '@/utils/randomPick';
+
+/** 根据当前时间返回默认用餐类型：09:59前早餐，10:00-13:59午餐，14:00后晚餐 */
+function getDefaultMealType(): MealType {
+  const hour = new Date().getHours();
+  if (hour < 10) return '早餐';
+  if (hour < 14) return '午餐';
+  return '晚餐';
+}
 
 // ========== State ==========
 interface AppState {
@@ -15,7 +23,7 @@ const DEFAULT_SETTINGS: Settings = {
   animationMode: 'slot',
   noRepeat: true,
   noRepeatCount: 3,
-  selectedMealType: '午餐',
+  selectedMealType: getDefaultMealType(),
   selectedCuisine: '中餐',
 };
 
