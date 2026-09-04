@@ -8,6 +8,17 @@ export function formatTime(ts: number): string {
   return `${h}:${m}`;
 }
 
+/** 格式化年月为 YYYY-MM（month 0-indexed 输入，输出 1-indexed 补零） */
+export function formatYearMonth(year: number, month: number): string {
+  return `${year}-${String(month + 1).padStart(2, '0')}`;
+}
+
+/** 判断时间戳是否属于指定年月（month 0-indexed） */
+export function isSameMonth(ts: number, year: number, month: number): boolean {
+  const d = new Date(ts);
+  return d.getFullYear() === year && d.getMonth() === month;
+}
+
 /** 获取日期标签：今天/昨天/前天/M月D日 */
 export function formatDateLabel(ts: number): string {
   const now = new Date();

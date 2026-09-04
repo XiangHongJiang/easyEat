@@ -499,6 +499,135 @@ body {
   text-align: right;
 }
 
+/* 非今天的卡片：弱化视觉权重，让今天更突出 */
+.history-date-group.is-past .history-last-card {
+  background: var(--bg-card);
+  padding: 12px;
+  box-shadow: var(--shadow-card);
+}
+.history-date-group.is-past .history-last-card .last-emoji {
+  font-size: 32px;
+  width: 44px; height: 44px;
+  border-radius: 10px;
+}
+.history-date-group.is-past .history-last-card .last-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+.history-date-group.is-past .history-last-card .last-label {
+  margin-bottom: 8px;
+}
+
+/* ========== 月份选择器 ========== */
+.month-picker-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--color-border);
+  background: var(--bg-card);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.month-picker-trigger:active {
+  transform: scale(0.97);
+}
+.month-picker-trigger .arrow {
+  font-size: 10px;
+  opacity: 0.5;
+  margin-top: 2px;
+}
+
+/* 月份选择器弹窗 */
+.month-picker {
+  width: 280px;
+  padding: 16px;
+}
+.month-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.month-picker-year {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.month-picker-year-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.month-picker-year-btn:active {
+  transform: scale(0.92);
+}
+.month-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.month-picker-month {
+  position: relative;
+  padding: 12px 0;
+  border-radius: 12px;
+  border: 1.5px solid var(--color-border);
+  background: var(--bg-card);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  text-align: center;
+  transition: all 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.month-picker-month:active {
+  transform: scale(0.95);
+}
+.month-picker-month.active {
+  background: var(--color-main);
+  color: #fff;
+  border-color: var(--color-main);
+  box-shadow: var(--shadow-btn);
+}
+.month-picker-month .dot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-main);
+}
+.month-picker-month.active .dot {
+  background: #fff;
+}
+.month-picker-month .today-mark {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 9px;
+  color: var(--color-main);
+  font-weight: 800;
+}
+.month-picker-month.active .today-mark {
+  color: #fff;
+}
+
 /* 空状态 */
 .empty-state {
   flex: 1;
@@ -1176,9 +1305,9 @@ body {
   </div>
 </div>
 
-<!-- ========== 预览4: 历史 - 默认视图（最近一次 + 折叠） ========== -->
+<!-- ========== 预览4: 历史 · 9月（当前月） ========== -->
 <div class="preview-item">
-  <div class="preview-label">📋 历史 · 默认视图</div>
+  <div class="preview-label">📋 历史 · 9月（当前月）</div>
   <div class="phone">
     <div class="phone-notch"></div>
     <div class="status-bar">
@@ -1188,65 +1317,76 @@ body {
 
     <div class="page active">
       <div class="history-header">
-        <div class="history-title">📋 吃什么了</div>
+        <div class="month-picker-trigger">
+          📅 2026-09
+          <span class="arrow">▼</span>
+        </div>
         <button class="clear-btn">🗑️ 清空</button>
       </div>
 
-      <div class="history-tabs">
-        <div class="history-tab active">全部</div>
-        <div class="history-tab">近一周</div>
-        <div class="history-tab">近一月</div>
-      </div>
-
-      <!-- 最近一次 -->
-      <div class="history-last-card">
-        <div class="last-label">🕐 最近一次</div>
-        <div class="last-content">
-          <div class="last-emoji">🥘</div>
-          <div class="last-info">
-            <div class="last-name">黄焖鸡米饭</div>
-            <div class="last-meta">中餐 · 午餐</div>
+      <div class="history-list">
+        <!-- 今天 -->
+        <div class="history-date-group is-today">
+          <div class="history-date-label">📅 今天</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍲</div>
+              <div class="last-info">
+                <div class="last-name">麻辣香锅</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">19:30</div>
+            </div>
           </div>
-          <div class="last-time">今天<br>12:30</div>
+          <div class="history-last-card">
+            <div class="last-label">☀️ 午餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥘</div>
+              <div class="last-info">
+                <div class="last-name">黄焖鸡米饭</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">12:30</div>
+            </div>
+          </div>
+          <div class="history-last-card">
+            <div class="last-label">🌅 早餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥚</div>
+              <div class="last-info">
+                <div class="last-name">茶叶蛋 + 豆浆</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">08:15</div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- 展开提示 -->
-      <div class="history-expand-hint">
-        查看更多历史 <span class="arrow">▼</span>
-      </div>
-
-      <!-- 历史列表（默认折叠） -->
-      <div class="history-list-collapsible">
-        <div class="history-group">
-          <div class="history-group-date">📅 今天</div>
-          <div class="history-item">
-            <div class="h-emoji">🥚</div>
-            <div class="h-info">
-              <div class="h-name">茶叶蛋 + 豆浆</div>
-              <div class="h-meta">中餐 · 早餐</div>
+        <!-- 昨天 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 昨天</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍝</div>
+              <div class="last-info">
+                <div class="last-name">意大利面</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">19:00</div>
             </div>
-            <div class="h-time">08:15</div>
           </div>
-        </div>
-
-        <div class="history-group">
-          <div class="history-group-date">📅 昨天</div>
-          <div class="history-item">
-            <div class="h-emoji">🍲</div>
-            <div class="h-info">
-              <div class="h-name">麻辣香锅</div>
-              <div class="h-meta">中餐 · 晚餐</div>
+          <div class="history-last-card">
+            <div class="last-label">☀️ 午餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍔</div>
+              <div class="last-info">
+                <div class="last-name">汉堡套餐</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">12:20</div>
             </div>
-            <div class="h-time">19:42</div>
-          </div>
-          <div class="history-item">
-            <div class="h-emoji">🍜</div>
-            <div class="h-info">
-              <div class="h-name">兰州拉面</div>
-              <div class="h-meta">中餐 · 午餐</div>
-            </div>
-            <div class="h-time">12:05</div>
           </div>
         </div>
       </div>
@@ -1269,9 +1409,9 @@ body {
   </div>
 </div>
 
-<!-- ========== 预览5: 历史 - 近一周展开 ========== -->
+<!-- ========== 预览5: 历史 · 9月（多天展开） ========== -->
 <div class="preview-item">
-  <div class="preview-label">📅 历史 · 近一周展开</div>
+  <div class="preview-label">📅 历史 · 9月（多天展开）</div>
   <div class="phone">
     <div class="phone-notch"></div>
     <div class="status-bar">
@@ -1281,102 +1421,141 @@ body {
 
     <div class="page active">
       <div class="history-header">
-        <div class="history-title">📋 吃什么了</div>
+        <div class="month-picker-trigger">
+          📅 2026-09
+          <span class="arrow">▼</span>
+        </div>
         <button class="clear-btn">🗑️ 清空</button>
       </div>
 
-      <div class="history-tabs">
-        <div class="history-tab">全部</div>
-        <div class="history-tab active">近一周</div>
-        <div class="history-tab">近一月</div>
-      </div>
-
-      <div class="history-last-card">
-        <div class="last-label">🕐 最近一次</div>
-        <div class="last-content">
-          <div class="last-emoji">🥘</div>
-          <div class="last-info">
-            <div class="last-name">黄焖鸡米饭</div>
-            <div class="last-meta">中餐 · 午餐</div>
-          </div>
-          <div class="last-time">今天<br>12:30</div>
-        </div>
-      </div>
-
-      <div class="history-expand-hint expanded">
-        收起历史 <span class="arrow">▼</span>
-      </div>
-
-      <div class="history-list-collapsible show">
-        <div class="history-group">
-          <div class="history-group-date">📅 今天</div>
-          <div class="history-item">
-            <div class="h-emoji">🥘</div>
-            <div class="h-info">
-              <div class="h-name">黄焖鸡米饭</div>
-              <div class="h-meta">中餐 · 午餐</div>
+      <div class="history-list">
+        <!-- 今天 -->
+        <div class="history-date-group is-today">
+          <div class="history-date-label">📅 今天</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍲</div>
+              <div class="last-info">
+                <div class="last-name">麻辣香锅</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">19:30</div>
             </div>
-            <div class="h-time">12:30</div>
           </div>
-          <div class="history-item">
-            <div class="h-emoji">🥚</div>
-            <div class="h-info">
-              <div class="h-name">茶叶蛋 + 豆浆</div>
-              <div class="h-meta">中餐 · 早餐</div>
+          <div class="history-last-card">
+            <div class="last-label">☀️ 午餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥘</div>
+              <div class="last-info">
+                <div class="last-name">黄焖鸡米饭</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">12:30</div>
             </div>
-            <div class="h-time">08:15</div>
+          </div>
+          <div class="history-last-card">
+            <div class="last-label">🌅 早餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥚</div>
+              <div class="last-info">
+                <div class="last-name">茶叶蛋 + 豆浆</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">08:15</div>
+            </div>
           </div>
         </div>
 
-        <div class="history-group">
-          <div class="history-group-date">📅 昨天</div>
-          <div class="history-item">
-            <div class="h-emoji">🍲</div>
-            <div class="h-info">
-              <div class="h-name">麻辣香锅</div>
-              <div class="h-meta">中餐 · 晚餐</div>
+        <!-- 昨天 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 昨天</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍝</div>
+              <div class="last-info">
+                <div class="last-name">意大利面</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">19:00</div>
             </div>
-            <div class="h-time">19:42</div>
           </div>
-          <div class="history-item">
-            <div class="h-emoji">🍜</div>
-            <div class="h-info">
-              <div class="h-name">兰州拉面</div>
-              <div class="h-meta">中餐 · 午餐</div>
+          <div class="history-last-card">
+            <div class="last-label">☀️ 午餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍔</div>
+              <div class="last-info">
+                <div class="last-name">汉堡套餐</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">12:20</div>
             </div>
-            <div class="h-time">12:05</div>
           </div>
-        </div>
-
-        <div class="history-group">
-          <div class="history-group-date">📅 8月31日</div>
-          <div class="history-item">
-            <div class="h-emoji">🍱</div>
-            <div class="h-info">
-              <div class="h-name">日式便当</div>
-              <div class="h-meta">西餐 · 午餐</div>
+          <div class="history-last-card">
+            <div class="last-label">🌅 早餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥐</div>
+              <div class="last-info">
+                <div class="last-name">可颂面包</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">07:30</div>
             </div>
-            <div class="h-time">12:20</div>
-          </div>
-          <div class="history-item">
-            <div class="h-emoji">🍝</div>
-            <div class="h-info">
-              <div class="h-name">意大利面</div>
-              <div class="h-meta">西餐 · 晚餐</div>
-            </div>
-            <div class="h-time">19:00</div>
           </div>
         </div>
 
-        <div class="history-group">
-          <div class="history-group-date">📅 8月30日</div>
-          <div class="history-item">
-            <div class="h-emoji">🥟</div>
-            <div class="h-info">
-              <div class="h-name">手工水饺</div>
-              <div class="h-meta">中餐 · 晚餐</div>
+        <!-- 前天 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 前天</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍣</div>
+              <div class="last-info">
+                <div class="last-name">三文鱼寿司</div>
+                <div class="last-meta">日料</div>
+              </div>
+              <div class="last-time">20:00</div>
             </div>
-            <div class="h-time">18:30</div>
+          </div>
+          <div class="history-last-card">
+            <div class="last-label">☀️ 午餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍜</div>
+              <div class="last-info">
+                <div class="last-name">兰州拉面</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">12:10</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9月1日 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 9月1日</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥟</div>
+              <div class="last-info">
+                <div class="last-name">手工水饺</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">19:00</div>
+            </div>
+          </div>
+          <div class="history-last-card">
+            <div class="last-label">☀️ 午餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍛</div>
+              <div class="last-info">
+                <div class="last-name">咖喱饭</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">12:00</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1399,9 +1578,9 @@ body {
   </div>
 </div>
 
-<!-- ========== 预览6: 历史 - 近一月 ========== -->
+<!-- ========== 预览6: 历史 · 8月（切换到其他月份） ========== -->
 <div class="preview-item">
-  <div class="preview-label">📅 历史 · 近一月</div>
+  <div class="preview-label">📅 历史 · 8月（切换月份）</div>
   <div class="phone">
     <div class="phone-notch"></div>
     <div class="status-bar">
@@ -1411,114 +1590,140 @@ body {
 
     <div class="page active">
       <div class="history-header">
-        <div class="history-title">📋 吃什么了</div>
+        <div class="month-picker-trigger">
+          📅 2026-08
+          <span class="arrow">▼</span>
+        </div>
         <button class="clear-btn">🗑️ 清空</button>
       </div>
 
-      <div class="history-tabs">
-        <div class="history-tab">全部</div>
-        <div class="history-tab">近一周</div>
-        <div class="history-tab active">近一月</div>
-      </div>
-
-      <div class="history-last-card">
-        <div class="last-label">🕐 最近一次</div>
-        <div class="last-content">
-          <div class="last-emoji">🥘</div>
-          <div class="last-info">
-            <div class="last-name">黄焖鸡米饭</div>
-            <div class="last-meta">中餐 · 午餐</div>
-          </div>
-          <div class="last-time">今天<br>12:30</div>
-        </div>
-      </div>
-
-      <div class="history-expand-hint expanded">
-        收起历史 <span class="arrow">▼</span>
-      </div>
-
-      <div class="history-list-collapsible show">
-        <div class="history-group">
-          <div class="history-group-date">📅 今天 9月2日</div>
-          <div class="history-item">
-            <div class="h-emoji">🥘</div>
-            <div class="h-info">
-              <div class="h-name">黄焖鸡米饭</div>
-              <div class="h-meta">中餐 · 午餐</div>
+      <div class="history-list">
+        <!-- 8月30日 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 8月30日</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍝</div>
+              <div class="last-info">
+                <div class="last-name">意大利面</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">19:00</div>
             </div>
-            <div class="h-time">12:30</div>
+          </div>
+          <div class="history-last-card">
+            <div class="last-label">☀️ 午餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥘</div>
+              <div class="last-info">
+                <div class="last-name">黄焖鸡米饭</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">12:30</div>
+            </div>
           </div>
         </div>
 
-        <div class="history-group">
-          <div class="history-group-date">📅 8月31日</div>
-          <div class="history-item">
-            <div class="h-emoji">🍱</div>
-            <div class="h-info">
-              <div class="h-name">日式便当</div>
-              <div class="h-meta">西餐 · 午餐</div>
+        <!-- 8月28日 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 8月28日</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥟</div>
+              <div class="last-info">
+                <div class="last-name">手工水饺</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">18:30</div>
             </div>
-            <div class="h-time">12:20</div>
+          </div>
+          <div class="history-last-card">
+            <div class="last-label">🌅 早餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥐</div>
+              <div class="last-info">
+                <div class="last-name">可颂面包</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">07:30</div>
+            </div>
           </div>
         </div>
 
-        <div class="history-group">
-          <div class="history-group-date">📅 8月27日</div>
-          <div class="history-item">
-            <div class="h-emoji">🍛</div>
-            <div class="h-info">
-              <div class="h-name">咖喱饭</div>
-              <div class="h-meta">西餐 · 午餐</div>
+        <!-- 8月20日 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 8月20日</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🥩</div>
+              <div class="last-info">
+                <div class="last-name">牛排</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">19:00</div>
             </div>
-            <div class="h-time">12:10</div>
+          </div>
+          <div class="history-last-card">
+            <div class="last-label">☀️ 午餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍛</div>
+              <div class="last-info">
+                <div class="last-name">咖喱饭</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">12:10</div>
+            </div>
           </div>
         </div>
 
-        <div class="history-group">
-          <div class="history-group-date">📅 8月20日</div>
-          <div class="history-item">
-            <div class="h-emoji">🥩</div>
-            <div class="h-info">
-              <div class="h-name">牛排</div>
-              <div class="h-meta">西餐 · 晚餐</div>
+        <!-- 8月15日 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 8月15日</div>
+          <div class="history-last-card">
+            <div class="last-label">☀️ 午餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍱</div>
+              <div class="last-info">
+                <div class="last-name">日式便当</div>
+                <div class="last-meta">日料</div>
+              </div>
+              <div class="last-time">12:20</div>
             </div>
-            <div class="h-time">19:00</div>
           </div>
         </div>
 
-        <div class="history-group">
-          <div class="history-group-date">📅 8月15日</div>
-          <div class="history-item">
-            <div class="h-emoji">🥟</div>
-            <div class="h-info">
-              <div class="h-name">手工水饺</div>
-              <div class="h-meta">中餐 · 晚餐</div>
+        <!-- 8月10日 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 8月10日</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍜</div>
+              <div class="last-info">
+                <div class="last-name">兰州拉面</div>
+                <div class="last-meta">中餐</div>
+              </div>
+              <div class="last-time">19:30</div>
             </div>
-            <div class="h-time">18:30</div>
           </div>
         </div>
 
-        <div class="history-group">
-          <div class="history-group-date">📅 8月10日</div>
-          <div class="history-item">
-            <div class="h-emoji">🍜</div>
-            <div class="h-info">
-              <div class="h-name">兰州拉面</div>
-              <div class="h-meta">中餐 · 午餐</div>
+        <!-- 8月5日 -->
+        <div class="history-date-group is-past">
+          <div class="history-date-label">📅 8月5日</div>
+          <div class="history-last-card">
+            <div class="last-label">🌙 晚餐</div>
+            <div class="last-content">
+              <div class="last-emoji">🍕</div>
+              <div class="last-info">
+                <div class="last-name">必胜客披萨</div>
+                <div class="last-meta">西餐</div>
+              </div>
+              <div class="last-time">19:30</div>
             </div>
-            <div class="h-time">12:00</div>
-          </div>
-        </div>
-
-        <div class="history-group">
-          <div class="history-group-date">📅 8月5日</div>
-          <div class="history-item">
-            <div class="h-emoji">🍕</div>
-            <div class="h-info">
-              <div class="h-name">必胜客披萨</div>
-              <div class="h-meta">西餐 · 晚餐</div>
-            </div>
-            <div class="h-time">19:30</div>
           </div>
         </div>
       </div>
@@ -1541,9 +1746,9 @@ body {
   </div>
 </div>
 
-<!-- ========== 预览7: 历史 - 空状态 ========== -->
+<!-- ========== 预览7: 历史 · 空月份 ========== -->
 <div class="preview-item">
-  <div class="preview-label">🌙 历史 · 空状态</div>
+  <div class="preview-label">🌙 历史 · 空月份</div>
   <div class="phone">
     <div class="phone-notch"></div>
     <div class="status-bar">
@@ -1553,20 +1758,86 @@ body {
 
     <div class="page active">
       <div class="history-header">
-        <div class="history-title">📋 吃什么了</div>
-      </div>
-
-      <div class="history-tabs">
-        <div class="history-tab active">全部</div>
-        <div class="history-tab">近一周</div>
-        <div class="history-tab">近一月</div>
+        <div class="month-picker-trigger">
+          📅 2026-07
+          <span class="arrow">▼</span>
+        </div>
       </div>
 
       <div class="empty-state">
-        <div class="empty-icon">🍽️</div>
+        <div class="empty-icon">📭</div>
         <div class="empty-text">
-          还没有选过菜哦<br>
-          去首页点一下「帮我选」吧！
+          该月份暂无记录<br>
+          切换到其他月份看看吧
+        </div>
+      </div>
+    </div>
+
+    <div class="tabbar">
+      <div class="tabbar-item">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label">首页</span>
+      </div>
+      <div class="tabbar-item active">
+        <span class="tab-icon">📋</span>
+        <span class="tab-label">历史</span>
+      </div>
+      <div class="tabbar-item">
+        <span class="tab-icon">⚙️</span>
+        <span class="tab-label">设置</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 预览7b: 月份选择器弹窗 ========== -->
+<div class="preview-item">
+  <div class="preview-label">🗓️ 历史 · 月份选择器</div>
+  <div class="phone">
+    <div class="phone-notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span class="icons">📶 🔋</span>
+    </div>
+
+    <div class="page active">
+      <div class="history-header">
+        <div class="month-picker-trigger">
+          📅 2026-09
+          <span class="arrow">▼</span>
+        </div>
+        <button class="clear-btn">🗑️ 清空</button>
+      </div>
+
+      <!-- 月份选择器弹窗 -->
+      <div class="modal-overlay">
+        <div class="modal-content month-picker">
+          <div class="month-picker-header">
+            <button class="month-picker-year-btn">‹</button>
+            <div class="month-picker-year">2026</div>
+            <button class="month-picker-year-btn">›</button>
+          </div>
+          <div class="month-picker-grid">
+            <div class="month-picker-month">1月</div>
+            <div class="month-picker-month">2月</div>
+            <div class="month-picker-month">3月</div>
+            <div class="month-picker-month">4月</div>
+            <div class="month-picker-month">5月</div>
+            <div class="month-picker-month">6月</div>
+            <div class="month-picker-month">7月</div>
+            <div class="month-picker-month">
+              8月
+              <span class="dot"></span>
+            </div>
+            <div class="month-picker-month active">
+              9月
+              <span class="today-mark">今</span>
+              <span class="dot"></span>
+            </div>
+            <div class="month-picker-month">10月</div>
+            <div class="month-picker-month">11月</div>
+            <div class="month-picker-month">12月</div>
+          </div>
         </div>
       </div>
     </div>
