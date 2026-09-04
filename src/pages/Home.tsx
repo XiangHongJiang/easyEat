@@ -48,7 +48,9 @@ export function Home() {
     if (spinning) return;
     // 转盘模式只从前8个菜品中选（转盘最多显示8个扇形）
     const pickPool = settings.animationMode === 'wheel' ? pool.slice(0, 8) : pool;
-    const picked = pickRandomDish(pickPool, history, settings.noRepeat, settings.noRepeatCount);
+    // noRepeat 按当前用餐类型过滤历史，避免跨时段去重失效
+    const sameTypeHistory = history.filter((h) => h.dish.mealType === settings.selectedMealType);
+    const picked = pickRandomDish(pickPool, sameTypeHistory, settings.noRepeat, settings.noRepeatCount);
     if (!picked) return;
 
     setResult(picked);
@@ -65,7 +67,7 @@ export function Home() {
       }, 2900);
     }
     // 转盘模式由 Wheel 组件的 onSpinEnd 回调处理
-  }, [spinning, pool, history, settings.noRepeat, settings.noRepeatCount, settings.animationMode, dispatch, pickRandomDish]);
+  }, [spinning, pool, history, settings.noRepeat, settings.noRepeatCount, settings.animationMode, settings.selectedMealType, dispatch, pickRandomDish]);
 
   // 转盘结束回调
   const handleWheelEnd = useCallback(() => {
@@ -83,6 +85,31 @@ export function Home() {
       if (spinTimerRef.current) clearTimeout(spinTimerRef.current);
     };
   }, []);
+
+  // 切换用餐类型或菜系时：如果今天已选过该组合，恢复结果；否则重置
+  useEffect(() => {
+    if (spinTimerRef.current) clearTimeout(spinTimerRef.current);
+    setSpinning(false);
+
+    // 查找今天该用餐类型+菜系的历史记录
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayMs = todayStart.getTime();
+    const todayEntry = history.find(
+      (e) =>
+        e.timestamp >= todayMs &&
+        e.dish.mealType === settings.selectedMealType &&
+        e.dish.cuisine === settings.selectedCuisine,
+    );
+
+    if (todayEntry) {
+      setResult(todayEntry.dish);
+      setShowResult(true);
+    } else {
+      setResult(null);
+      setShowResult(false);
+    }
+  }, [settings.selectedMealType, settings.selectedCuisine, history]);
 
   const handleReroll = () => {
     setShowResult(false);
