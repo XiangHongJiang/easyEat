@@ -698,6 +698,142 @@ body {
   gap: 8px;
 }
 
+/* ========== 菜品页 ========== */
+.dishes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px 12px;
+}
+.dishes-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.dishes-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-btn {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--color-border);
+  background: var(--bg-card);
+  border-radius: 12px;
+  font-size: 18px;
+  color: var(--color-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+}
+.icon-btn.primary {
+  background: var(--color-main);
+  color: #fff;
+  border-color: var(--color-main);
+  box-shadow: var(--shadow-btn);
+}
+.meal-tabs {
+  display: flex;
+  padding: 0 20px;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.meal-tab {
+  flex: 1;
+  padding: 10px 0;
+  border: 1.5px solid var(--color-border);
+  background: var(--bg-card);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-light);
+  cursor: pointer;
+  text-align: center;
+  transition: all .2s;
+}
+.meal-tab.active {
+  border-color: var(--color-main);
+  background: #FFF5EB;
+  color: var(--color-main);
+  font-weight: 800;
+}
+.dishes-list {
+  flex: 1;
+  padding: 0 20px 20px;
+  overflow-y: auto;
+}
+.cuisine-group {
+  margin-bottom: 20px;
+}
+.cuisine-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+.dish-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 8px;
+}
+.dish-card .d-emoji {
+  font-size: 28px;
+  width: 44px; height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.dish-card .d-info {
+  flex: 1;
+  min-width: 0;
+}
+.dish-card .d-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+.dish-card .d-desc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dish-card .d-cat {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  background: var(--bg-secondary);
+  padding: 3px 8px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.dish-card .d-delete {
+  color: #E57373;
+  cursor: pointer;
+  font-size: 18px;
+  flex-shrink: 0;
+  padding: 4px;
+}
+.dish-card.builtin .d-delete {
+  display: none;
+}
+.dish-card.custom {
+  border: 1.5px solid #FFCC80;
+  background: #FFF8F0;
+}
+
 /* 开关 */
 .toggle {
   width: 44px; height: 26px;
@@ -1859,9 +1995,9 @@ body {
   </div>
 </div>
 
-<!-- ========== 预览6: 设置页 ========== -->
+<!-- ========== 预览6: 菜品页 · 午餐 ========== -->
 <div class="preview-item">
-  <div class="preview-label">⚙️ 设置页</div>
+  <div class="preview-label">🍽️ 菜品页 · 午餐</div>
   <div class="phone">
     <div class="phone-notch"></div>
     <div class="status-bar">
@@ -1870,77 +2006,119 @@ body {
     </div>
 
     <div class="page active">
-      <div class="settings-header">
-        <div class="settings-title">⚙️ 设置</div>
+      <div class="dishes-header">
+        <div class="dishes-title">🍽️ 菜品</div>
+        <div class="dishes-actions">
+          <button class="icon-btn">⚙️</button>
+          <button class="icon-btn primary">＋</button>
+        </div>
       </div>
 
-      <div class="settings-list">
-        <!-- 动画模式 -->
-        <div class="settings-section">
-          <div class="settings-section-title">动画模式</div>
-          <div class="settings-card">
-            <div class="settings-row">
-              <span class="s-label">选菜动画</span>
-              <div class="mode-select">
-                <button class="active">🎰 老虎机</button>
-                <button>🎡 转盘</button>
-              </div>
+      <div class="meal-tabs">
+        <div class="meal-tab">早餐</div>
+        <div class="meal-tab active">午餐</div>
+        <div class="meal-tab">晚餐</div>
+      </div>
+
+      <div class="dishes-list">
+        <!-- 中餐 -->
+        <div class="cuisine-group">
+          <div class="cuisine-label">📌 中餐</div>
+          <div class="dish-card custom">
+            <div class="d-emoji">🧋</div>
+            <div class="d-info">
+              <div class="d-name">珍珠奶茶</div>
+              <div class="d-desc">自定义菜品</div>
             </div>
+            <span class="d-cat">中餐</span>
+            <span class="d-delete">✕</span>
+          </div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🥘</div>
+            <div class="d-info">
+              <div class="d-name">黄焖鸡米饭</div>
+              <div class="d-desc">浓郁酱汁拌饭，打工人的快乐源泉</div>
+            </div>
+            <span class="d-cat">中餐</span>
+            <span class="d-delete">✕</span>
+          </div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🍜</div>
+            <div class="d-info">
+              <div class="d-name">兰州拉面</div>
+              <div class="d-desc">热气腾腾，一清二白三红</div>
+            </div>
+            <span class="d-cat">中餐</span>
+            <span class="d-delete">✕</span>
+          </div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🍲</div>
+            <div class="d-info">
+              <div class="d-name">麻辣香锅</div>
+              <div class="d-desc">麻辣鲜香，想吃什么夹什么</div>
+            </div>
+            <span class="d-cat">中餐</span>
+            <span class="d-delete">✕</span>
+          </div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🥡</div>
+            <div class="d-info">
+              <div class="d-name">宫保鸡丁</div>
+              <div class="d-desc">花生鸡丁，甜辣下饭</div>
+            </div>
+            <span class="d-cat">中餐</span>
+            <span class="d-delete">✕</span>
           </div>
         </div>
 
-        <!-- 不重复设置 -->
-        <div class="settings-section">
-          <div class="settings-section-title">智能去重</div>
-          <div class="settings-card">
-            <div class="settings-row">
-              <span class="s-label">近期不重复</span>
-              <div class="toggle on"></div>
+        <!-- 西餐 -->
+        <div class="cuisine-group">
+          <div class="cuisine-label">📌 西餐</div>
+          <div class="dish-card custom">
+            <div class="d-emoji">🍕</div>
+            <div class="d-info">
+              <div class="d-name">必胜客披萨</div>
+              <div class="d-desc">自定义菜品</div>
             </div>
-            <div class="settings-row">
-              <span class="s-label">排除最近次数</span>
-              <div class="stepper">
-                <button>−</button>
-                <span class="value">3</span>
-                <button>＋</button>
-              </div>
-            </div>
+            <span class="d-cat">西餐</span>
+            <span class="d-delete">✕</span>
           </div>
-        </div>
-
-        <!-- 自定义菜品 -->
-        <div class="settings-section">
-          <div class="settings-section-title">我的菜品</div>
-          <div class="settings-card" style="padding: 12px 16px;">
-            <div class="dish-list">
-              <div class="dish-item">
-                <span class="d-emoji">🧋</span>
-                <span class="d-name">珍珠奶茶</span>
-                <span class="d-cat">中餐</span>
-                <span class="d-delete">✕</span>
-              </div>
-              <div class="dish-item">
-                <span class="d-emoji">🥟</span>
-                <span class="d-name">妈妈包的饺子</span>
-                <span class="d-cat">中餐</span>
-                <span class="d-delete">✕</span>
-              </div>
-              <div class="dish-item">
-                <span class="d-emoji">🍕</span>
-                <span class="d-name">必胜客披萨</span>
-                <span class="d-cat">西餐</span>
-                <span class="d-delete">✕</span>
-              </div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🍱</div>
+            <div class="d-info">
+              <div class="d-name">日式便当</div>
+              <div class="d-desc">荤素搭配，精致好看</div>
             </div>
-            <button class="add-dish-btn">＋ 添加自定义菜品</button>
+            <span class="d-cat">西餐</span>
+            <span class="d-delete">✕</span>
           </div>
-        </div>
-
-        <!-- 数据管理 -->
-        <div class="settings-section">
-          <div class="settings-section-title">数据管理</div>
-          <button class="danger-btn">🗑️ 清空自定义菜品</button>
-          <button class="danger-btn">↩️ 重置所有数据</button>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🍝</div>
+            <div class="d-info">
+              <div class="d-name">意大利面</div>
+              <div class="d-desc">弹牙意面配浓郁酱汁</div>
+            </div>
+            <span class="d-cat">西餐</span>
+            <span class="d-delete">✕</span>
+          </div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🍛</div>
+            <div class="d-info">
+              <div class="d-name">咖喱饭</div>
+              <div class="d-desc">浓郁咖喱，拌饭一绝</div>
+            </div>
+            <span class="d-cat">西餐</span>
+            <span class="d-delete">✕</span>
+          </div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🍔</div>
+            <div class="d-info">
+              <div class="d-name">汉堡</div>
+              <div class="d-desc">多汁肉饼，大口满足</div>
+            </div>
+            <span class="d-cat">西餐</span>
+            <span class="d-delete">✕</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1955,16 +2133,16 @@ body {
         <span class="tab-label">历史</span>
       </div>
       <div class="tabbar-item active">
-        <span class="tab-icon">⚙️</span>
-        <span class="tab-label">设置</span>
+        <span class="tab-icon">🍽️</span>
+        <span class="tab-label">菜品</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ========== 预览8: 设置页 - 添加菜品弹窗 ========== -->
+<!-- ========== 预览8: 菜品页 · 添加菜品弹窗 ========== -->
 <div class="preview-item">
-  <div class="preview-label">➕ 设置 · 添加菜品弹窗</div>
+  <div class="preview-label">➕ 菜品 · 添加菜品弹窗</div>
   <div class="phone">
     <div class="phone-notch"></div>
     <div class="status-bar">
@@ -1973,14 +2151,41 @@ body {
     </div>
 
     <div class="page active">
-      <div class="settings-header">
-        <div class="settings-title">⚙️ 设置</div>
+      <div class="dishes-header">
+        <div class="dishes-title">🍽️ 菜品</div>
+        <div class="dishes-actions">
+          <button class="icon-btn">⚙️</button>
+          <button class="icon-btn primary">＋</button>
+        </div>
       </div>
 
-      <div class="settings-list">
-        <div class="settings-section">
-          <div class="settings-section-title">菜品管理</div>
-          <button class="primary-btn">➕ 添加菜品</button>
+      <div class="meal-tabs">
+        <div class="meal-tab">早餐</div>
+        <div class="meal-tab active">午餐</div>
+        <div class="meal-tab">晚餐</div>
+      </div>
+
+      <div class="dishes-list">
+        <div class="cuisine-group">
+          <div class="cuisine-label">📌 中餐</div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🥘</div>
+            <div class="d-info">
+              <div class="d-name">黄焖鸡米饭</div>
+              <div class="d-desc">浓郁酱汁拌饭，打工人的快乐源泉</div>
+            </div>
+            <span class="d-cat">中餐</span>
+            <span class="d-delete">✕</span>
+          </div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🍜</div>
+            <div class="d-info">
+              <div class="d-name">兰州拉面</div>
+              <div class="d-desc">热气腾腾，一清二白三红</div>
+            </div>
+            <span class="d-cat">中餐</span>
+            <span class="d-delete">✕</span>
+          </div>
         </div>
       </div>
     </div>
@@ -2053,8 +2258,113 @@ body {
         <span class="tab-label">历史</span>
       </div>
       <div class="tabbar-item active">
-        <span class="tab-icon">⚙️</span>
-        <span class="tab-label">设置</span>
+        <span class="tab-icon">🍽️</span>
+        <span class="tab-label">菜品</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 预览9: 菜品页 · 设置弹窗 ========== -->
+<div class="preview-item">
+  <div class="preview-label">⚙️ 菜品 · 设置弹窗</div>
+  <div class="phone">
+    <div class="phone-notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span class="icons">📶 🔋</span>
+    </div>
+
+    <div class="page active">
+      <div class="dishes-header">
+        <div class="dishes-title">🍽️ 菜品</div>
+        <div class="dishes-actions">
+          <button class="icon-btn">⚙️</button>
+          <button class="icon-btn primary">＋</button>
+        </div>
+      </div>
+
+      <div class="meal-tabs">
+        <div class="meal-tab">早餐</div>
+        <div class="meal-tab active">午餐</div>
+        <div class="meal-tab">晚餐</div>
+      </div>
+
+      <div class="dishes-list">
+        <div class="cuisine-group">
+          <div class="cuisine-label">📌 中餐</div>
+          <div class="dish-card builtin">
+            <div class="d-emoji">🥘</div>
+            <div class="d-info">
+              <div class="d-name">黄焖鸡米饭</div>
+              <div class="d-desc">浓郁酱汁拌饭，打工人的快乐源泉</div>
+            </div>
+            <span class="d-cat">中餐</span>
+            <span class="d-delete">✕</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 设置弹窗 -->
+    <div class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-title">⚙️ 设置</div>
+
+        <!-- 动画模式 -->
+        <div class="form-group">
+          <label class="form-label">动画模式</label>
+          <div class="mode-select">
+            <button class="active">🎰 老虎机</button>
+            <button>🎡 转盘</button>
+          </div>
+        </div>
+
+        <!-- 智能去重 -->
+        <div class="form-group">
+          <label class="form-label">智能去重</label>
+          <div class="settings-card">
+            <div class="settings-row">
+              <span class="s-label">近期不重复</span>
+              <div class="toggle on"></div>
+            </div>
+            <div class="settings-row">
+              <span class="s-label">排除最近次数</span>
+              <div class="stepper">
+                <button>−</button>
+                <span class="value">3</span>
+                <button>＋</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 数据管理 -->
+        <div class="form-group">
+          <label class="form-label">数据管理</label>
+          <button class="danger-btn">🗑️ 清空自定义菜品</button>
+          <button class="danger-btn">↩️ 重置所有数据</button>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-cancel">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabbar">
+      <div class="tabbar-item">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label">首页</span>
+      </div>
+      <div class="tabbar-item">
+        <span class="tab-icon">📋</span>
+        <span class="tab-label">历史</span>
+      </div>
+      <div class="tabbar-item active">
+        <span class="tab-icon">🍽️</span>
+        <span class="tab-label">菜品</span>
       </div>
     </div>
   </div>
