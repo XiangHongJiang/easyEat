@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Dish, MealType, Cuisine } from '@/types';
-import { EMOJI_OPTIONS_BY_MEAL } from '@/data/dishes';
+import { EMOJI_OPTIONS_BY_CATEGORY } from '@/data/dishes';
+import type { EmojiCategory } from '@/data/dishes';
 import { genId } from '@/utils/randomPick';
 
 interface AddDishModalProps {
@@ -11,10 +12,17 @@ interface AddDishModalProps {
 
 const MEAL_TYPES: MealType[] = ['早餐', '午餐', '晚餐'];
 const CUISINES: Cuisine[] = ['中餐', '西餐'];
+const EMOJI_CATEGORIES: EmojiCategory[] = ['蔬菜', '肉类', '水产', '面点', '饮品', '水果', '其他'];
 
 export function AddDishModal({ defaultMealType, onClose, onConfirm }: AddDishModalProps) {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
   const [name, setName] = useState('');
-  const [emoji, setEmoji] = useState(EMOJI_OPTIONS_BY_MEAL[defaultMealType ?? '午餐'][0]);
+  const [emojiCategory, setEmojiCategory] = useState<EmojiCategory>('蔬菜');
+  const [emoji, setEmoji] = useState(EMOJI_OPTIONS_BY_CATEGORY['蔬菜'][0]);
   const [mealType, setMealType] = useState<MealType>(defaultMealType ?? '午餐');
   const [cuisine, setCuisine] = useState<Cuisine>('中餐');
   const [description, setDescription] = useState('');
@@ -51,10 +59,22 @@ export function AddDishModal({ defaultMealType, onClose, onConfirm }: AddDishMod
         </div>
 
         <div className="form-group">
-          <label className="form-label">选择 Emoji</label>
+          <div className="emoji-cat-bar">
+            {EMOJI_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                className={`emoji-cat-btn ${emojiCategory === cat ? 'selected' : ''}`}
+                onClick={() => {
+                  setEmojiCategory(cat);
+                  setEmoji(EMOJI_OPTIONS_BY_CATEGORY[cat][0]);
+                }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
           <div className="emoji-picker">
-            <span className="emoji-tip">当前餐次：{mealType}</span>
-            {EMOJI_OPTIONS_BY_MEAL[mealType].map((em) => (
+            {EMOJI_OPTIONS_BY_CATEGORY[emojiCategory].map((em) => (
               <button
                 key={em}
                 className={`emoji-option ${emoji === em ? 'selected' : ''}`}
@@ -73,10 +93,7 @@ export function AddDishModal({ defaultMealType, onClose, onConfirm }: AddDishMod
               <button
                 key={mt}
                 className={`cat-option ${mealType === mt ? 'selected' : ''}`}
-                onClick={() => {
-                  setMealType(mt);
-                  setEmoji(EMOJI_OPTIONS_BY_MEAL[mt][0]);
-                }}
+                onClick={() => setMealType(mt)}
               >
                 {mt}
               </button>

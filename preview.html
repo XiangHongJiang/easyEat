@@ -1085,10 +1085,39 @@ body {
   font-family: var(--font);
 }
 .form-input::placeholder { color: var(--color-text-muted); }
+.emoji-cat-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+}
+.emoji-cat-bar::-webkit-scrollbar { display: none; }
+.emoji-cat-btn {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border: 1.5px solid var(--color-border);
+  background: var(--bg-card);
+  color: var(--color-text-light);
+  cursor: pointer;
+  transition: all .2s;
+}
+.emoji-cat-btn.selected {
+  background: var(--color-main);
+  color: #fff;
+  border-color: var(--color-main);
+}
 .emoji-picker {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  max-height: 160px;
+  overflow-y: auto;
 }
 .emoji-option {
   width: 40px; height: 40px;
@@ -2244,29 +2273,34 @@ body {
 
         <div class="form-group">
           <label class="form-label">选择 Emoji</label>
+          <div class="emoji-cat-bar">
+            <div class="emoji-cat-btn selected">蔬菜</div>
+            <div class="emoji-cat-btn">肉类</div>
+            <div class="emoji-cat-btn">水产</div>
+            <div class="emoji-cat-btn">面点</div>
+            <div class="emoji-cat-btn">饮品</div>
+            <div class="emoji-cat-btn">水果</div>
+            <div class="emoji-cat-btn">其他</div>
+          </div>
           <div class="emoji-picker">
-            <span class="emoji-tip">当前餐次：午餐</span>
-            <div class="emoji-option selected">🥘</div>
-            <div class="emoji-option">🍜</div>
-            <div class="emoji-option">🍲</div>
-            <div class="emoji-option">🥟</div>
-            <div class="emoji-option">🍚</div>
-            <div class="emoji-option">🍅</div>
-            <div class="emoji-option">🥡</div>
-            <div class="emoji-option">🥩</div>
-            <div class="emoji-option">🦆</div>
-            <div class="emoji-option">🍖</div>
-            <div class="emoji-option">🫘</div>
-            <div class="emoji-option">🐟</div>
-            <div class="emoji-option">🍱</div>
-            <div class="emoji-option">🍝</div>
-            <div class="emoji-option">🍛</div>
-            <div class="emoji-option">🍔</div>
-            <div class="emoji-option">🍕</div>
-            <div class="emoji-option">🥪</div>
-            <div class="emoji-option">🌮</div>
-            <div class="emoji-option">🍟</div>
+            <div class="emoji-option selected">🍅</div>
+            <div class="emoji-option">🥬</div>
+            <div class="emoji-option">🥒</div>
+            <div class="emoji-option">🍆</div>
+            <div class="emoji-option">🫑</div>
+            <div class="emoji-option">🌶️</div>
+            <div class="emoji-option">🧄</div>
+            <div class="emoji-option">🧅</div>
+            <div class="emoji-option">🥕</div>
+            <div class="emoji-option">🫒</div>
+            <div class="emoji-option">🥔</div>
+            <div class="emoji-option">🍠</div>
+            <div class="emoji-option">🌽</div>
+            <div class="emoji-option">🥦</div>
+            <div class="emoji-option">🍄</div>
+            <div class="emoji-option">🫛</div>
             <div class="emoji-option">🥗</div>
+            <div class="emoji-option">🧆</div>
           </div>
         </div>
 
